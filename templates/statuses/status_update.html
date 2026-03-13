@@ -1,0 +1,40 @@
+<!-- templates/statuses/status_form.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if status %}Редактировать статус{% else %}Создать статус{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container wrapper flex-grow-1">
+    <h1 class="my-4">
+        {% if status %}
+            Редактирование статуса
+        {% else %}
+            Создание статуса
+        {% endif %}
+    </h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="name" class="form-label">Имя</label>
+            <input type="text" 
+                   name="name" 
+                   class="form-control" 
+                   value="{{ status.name }}"
+            >
+        </div>
+        
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                {% if status %}Сохранить{% else %}Создать{% endif %}
+            </button>
+            <a href="{% url 'statuses:status_list' %}" class="btn btn-secondary ms-2">
+                Отмена
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

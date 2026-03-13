@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Заголовок страницы -->
+    <h1 class="mb-4">Просмотр задачи</h1>
+    
+    <!-- Карточка задачи -->
+    <div class="card">
+        <!-- Шапка карточки с серым фоном и именем задачи -->
+        <div class="card-header bg-light">
+            <h3 class="mb-0">{{ task.name }}</h3>
+        </div>
+        
+        <!-- Тело карточки -->
+        <div class="card-body">
+            <div class="row">
+                <!-- Левая колонка с информацией -->
+                <div class="col-md-8">
+                    <!-- Таблица с деталями задачи -->
+                    <table class="table table-borderless">
+                        <tr>
+                            <td style="width: 150px;"><strong>Автор:</strong></td>
+                            <td>{{ task.creator.get_full_name|default:task.creator.username }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Исполнитель:</strong></td>
+                            <td>
+                                {% if task.executor %}
+                                    {{ task.executor.get_full_name|default:task.executor.username }}
+                                {% else %}
+                                    <span class="text-muted">Не назначен</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Статус:</strong></td>
+                            <td>
+                                {% if task.status %}
+                                    <span class="badge bg-info">{{ task.status.name }}</span>
+                                {% else %}
+                                    <span class="text-muted">Не указан</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Дата создания:</strong></td>
+                            <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Метки:</strong></td>
+                            <td>
+                                {% if task.labels.exists %}
+                                    {% for label in task.labels.all %}
+                                        <span class="badge bg-secondary me-1">{{ label.name }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="text-muted">Нет меток</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if task.description %}
+                        <tr>
+                            <td><strong>Описание:</strong></td>
+                            <td>{{ task.description|linebreaks }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
+                
+                <!-- Правая колонка (можно оставить пустой или добавить что-то еще) -->
+                <div class="col-md-4">
+                    <!-- Здесь может быть дополнительная информация -->
+                </div>
+            </div>
+            
+            <!-- Кнопки действий -->
+            <div class="mt-4">
+                <a href="{% url 'tasks:task_update' task.id %}" class="btn btn-warning me-2">
+                    <i class="bi bi-pencil"></i> Изменить задачу
+                </a>
+                <a href="{% url 'tasks:task_delete' task.id %}" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Удалить
+                </a>
+                <a href="{% url 'tasks:tasks' %}" class="btn btn-secondary ms-2">
+                    <i class="bi bi-arrow-left"></i> Назад к списку
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

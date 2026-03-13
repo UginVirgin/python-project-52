@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Статусы{% endblock %}
+
+{% block content %}
+<div class="container wrapper flex-grow-1">
+    <h1 class="my-4">Статусы</h1>
+    
+    <a class="btn btn-primary mb-3" href="{% url 'statuses:status_create' %}">
+        Создать статус
+    </a>
+    
+    {% if statuses %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Дата создания</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for status in statuses %}
+            <tr>
+                <td>{{ status.id }}</td>
+                <td>{{ status.name }}</td>
+                <td>{{ status.created_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                    <a href="{% url 'statuses:status_update' status.id %}" 
+                       class="btn btn-sm btn-outline-primary me-2">
+                        Изменить
+                    </a>
+                    <a href="{% url 'statuses:status_delete' status.id %}" 
+                       class="btn btn-sm btn-outline-danger">
+                        Удалить
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info">
+        Статусы не найдены. Создайте первый статус!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

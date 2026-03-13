@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container wrapper flex-grow-1">
+  <h1 class="my-4">Создать задачу</h1>
+  
+  <form method="post">
+    {% csrf_token %}    
+    <div class="mb-3">
+      <label class="form-label" for="id_name">Имя</label>
+      <input type="text" 
+              name="name" 
+              maxlength="150" 
+              class="form-control {% if errors.name %}is-invalid{% endif %}
+                                  {% if success.name %}is-valid{% endif %}" 
+              placeholder="Имя" 
+              required="" 
+              id="id_name"
+              value="{{ form_data.name|default:'' }}">
+      {% if errors.name %}
+        <div class="invalid-feedback">
+          {{ errors.name }}
+        </div>
+      {% elif success.name %}
+        <div class="valid-feedback">
+          {{ success.name }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label" for="id_description">Описание</label>
+      <textarea name="description" 
+                cols="40" rows="10" 
+                class="form-control {% if errors.description %}is-invalid{% endif %}
+                                  {% if success.description %}is-valid{% endif %}"
+                placeholder="Описание" 
+                id="id_description">{{ form_data.description|default:'' }}</textarea>
+      {% if errors.description %}
+        <div class="invalid-feedback">
+          {{ errors.description }}
+        </div>
+      {% elif success.description %}
+        <div class="valid-feedback">
+          {{ success.description }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label" for="id_status">Статус</label>
+      <select name="status" 
+              class="form-select {% if errors.status %}is-invalid{% endif %}
+                                  {% if success.status %}is-valid{% endif %}"
+              required="" 
+              id="id_status">
+        <option value="" {% if not form_data.status %}selected{% endif %}>---------</option>
+        {% for status in statuses %}
+          <option value="{{ status.id }}" 
+                  {% if form_data.status|stringformat:"i" == status.id|stringformat:"i" %}selected{% endif %}>
+            {{ status.name }}
+          </option>
+        {% endfor %}
+      </select>
+      {% if errors.status %}
+        <div class="invalid-feedback">
+          {{ errors.status }}
+        </div>
+      {% elif success.status %}
+        <div class="valid-feedback">
+          {{ success.status }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label" for="id_executor">Исполнитель</label>
+      <select name="executor" 
+              class="form-select {% if errors.executor %}is-invalid{% endif %}
+                                  {% if success.executor %}is-valid{% endif %}" 
+              id="id_executor">
+        <option value="" {% if not form_data.executor %}selected{% endif %}>---------</option>
+        {% for executor in executors %}
+          <option value="{{ executor.id }}" 
+                  {% if form_data.executor|stringformat:"i" == executor.id|stringformat:"i" %}selected{% endif %}>
+            {{ executor.first_name }} {{ executor.last_name }}
+          </option>
+        {% endfor %}
+      </select>
+      {% if errors.executor %}
+        <div class="invalid-feedback">
+          {{ errors.executor }}
+        </div>
+      {% elif success.executor %}
+        <div class="valid-feedback">
+          {{ success.executor }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label" for="id_labels">Метки</label>
+      <select name="labels" 
+              class="form-select {% if errors.labels %}is-invalid{% endif %}
+                                  {% if success.labels %}is-valid{% endif %}" 
+              id="id_labels" 
+              multiple 
+              size="5">
+        {% for label in labels %}
+          <option value="{{ label.id }}" 
+                  {% if label.id|stringformat:"i" in form_data.labels %}selected{% endif %}>
+            {{ label.name }}
+          </option>
+        {% endfor %}
+      </select>
+      {% if errors.labels %}
+        <div class="invalid-feedback">
+          {{ errors.labels }}
+        </div>
+      {% elif success.labels %}
+        <div class="valid-feedback">
+          {{ success.labels }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <input class="btn btn-primary" type="submit" value="Создать">
+  </form>
+</div>
+{% endblock %}

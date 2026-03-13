@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Редактирование пользователя</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        <label>Имя пользователя *</label>
+        <input type="text" name="username" class="form-control" 
+               value="{{ user.username }}" required>
+    </div>
+    
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" 
+               value="{{ user.email|default:'' }}">
+    </div>
+    
+    <div class="mb-3">
+        <label>Имя</label>
+        <input type="text" name="first_name" class="form-control" 
+               value="{{ user.first_name|default:'' }}">
+    </div>
+    
+    <div class="mb-3">
+        <label>Фамилия</label>
+        <input type="text" name="last_name" class="form-control" 
+               value="{{ user.last_name|default:'' }}">
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{% url 'user_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
