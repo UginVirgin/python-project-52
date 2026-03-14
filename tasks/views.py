@@ -113,7 +113,6 @@ def create_task(request):
         else:
             success['labels'] = '✓ Метки не выбраны'
         
-        # Если есть ошибки, возвращаем форму с подсветкой
         if errors:
             statuses = Status.objects.all()
             executors = User.objects.all()
@@ -129,7 +128,6 @@ def create_task(request):
             }
             return render(request, "tasks/task_create.html", context)
         
-        # Если нет ошибок, создаем задачу
         try:
             status = Status.objects.get(id=status_id)
             executor = User.objects.get(id=executor_id) if executor_id else None

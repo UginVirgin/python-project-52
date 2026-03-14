@@ -60,9 +60,7 @@ def status_delete(request, pk):
     status = get_object_or_404(Status, id=pk)
     
     if request.method == 'POST':
-        # Проверяем, есть ли задачи с этим статусом
         if Task.objects.filter(status=status).exists():
-            # Считаем количество задач с этим статусом для информативности
             tasks_count = Task.objects.filter(status=status).count()
             messages.error(
                 request, 
@@ -70,7 +68,6 @@ def status_delete(request, pk):
             )
             return redirect('statuses:status_list')
         
-        # Если задач нет, удаляем статус
         status.delete()
         messages.success(request, 'Статус успешно удален!')
         return redirect('statuses:status_list')

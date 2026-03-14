@@ -15,9 +15,7 @@ def label_create(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         
-        # Проверяем, существует ли метка с таким именем
         if Label.objects.filter(name=name).exists():
-            # Возвращаем форму с ошибкой
             context = {
                 'error_name': 'Метка с таким именем уже существует',
                 'form_data': {'name': name}
@@ -30,14 +28,12 @@ def label_create(request):
             return redirect('labels:label_list')
         except Exception as e:
             messages.error(request, f'Ошибка при создании метки: {e}')
-            # Возвращаем форму с введенными данными
             context = {
                 'error_name': str(e),
                 'form_data': {'name': name}
             }
             return render(request, 'labels/label_create.html', context)
 
-    # GET запрос - показываем пустую форму
     return render(request, 'labels/label_create.html')
 
 
@@ -64,7 +60,6 @@ def label_delete(request, pk):
     label = get_object_or_404(Label, id=pk)
     
     if request.method == 'POST':
-        # Проверяем, есть ли задачи с этой меткой
         if Task.objects.filter(labels=label).exists():
             messages.error(
                 request, 
@@ -72,7 +67,6 @@ def label_delete(request, pk):
             )
             return redirect('labels:label_list')
         
-        # Если задач нет, удаляем метку
         label.delete()
         messages.success(request, 'Метка успешно удалена!')
         return redirect('labels:label_list')

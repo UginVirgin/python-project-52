@@ -17,6 +17,9 @@ def users(request):
 
 
 def users_create(request):
+    form_data = request.POST if request.method == 'POST' else None
+    errors = {}
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password1 = request.POST.get('password1')
@@ -24,27 +27,34 @@ def users_create(request):
         email = request.POST.get('email')
         
         if password1 != password2:
-            messages.error(request, 'Пароли не совпадают')
-            return render(request, 'users/create_user.html')
+            errors['password2'] = 'Пароли не совпадают'
         
         if User.objects.filter(username=username).exists():
-            messages.error(request, 'Пользователь с таким именем уже существует')
-            return render(request, 'users/create_user.html')
+            errors['username'] = 'Пользователь с таким именем уже существует'
         
-        try:
-            User.objects.create_user(
-                username=username,
-                password=password1,
-                first_name=request.POST.get('first_name', ''),
-                last_name=request.POST.get('last_name', ''),
-                email=email
-            )
-            messages.success(request, 'Пользователь успешно создан!')
-            return redirect('users')
-        except Exception as e:
-            messages.error(request, f'Ошибка: {e}')
+        if not username:
+            errors['username'] = 'Имя пользователя обязательно'
+        
+        if not errors:
+            try:
+                User.objects.create_user(
+                    username=username,
+                    password=password1,
+                    first_name=request.POST.get('first_name', ''),
+                    last_name=request.POST.get('last_name', ''),
+                    email=email
+                )
+                messages.success(request, 'Пользователь успешно создан!')
+                return redirect('users:users')
+            except Exception as e:
+                messages.error(request, f'Ошибка: {e}')
+        
+        form_data = request.POST
     
-    return render(request, 'users/create_user.html')
+    return render(request, 'users/create_user.html', {
+        'form_data': form_data,
+        'errors': errors
+    })
 
 
 def user_update(request, pk):
@@ -82,6 +92,5 @@ class CustomLogoutView(LogoutView):
     """LogoutView с флеш-сообщением"""
     
     def dispatch(self, request, *args, **kwargs):
-        # Добавляем сообщение перед выходом
         messages.success(request, 'Вы успешно вышли из системы!')
         return super().dispatch(request, *args, **kwargs)
