@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
 from users import views
-from users.views import CustomLogoutView, index
+from users.views import CustomLogoutView, CustomLoginView, index
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -27,8 +27,8 @@ urlpatterns = [
     path("statuses/", include("statuses.urls")),
     path("labels/", include("labels.urls")),
     path("tasks/", include("tasks.urls")),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', CustomLogoutView.as_view(), name='logout'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

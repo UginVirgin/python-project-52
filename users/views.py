@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.decorators import login_required
 
 
@@ -86,7 +86,17 @@ def user_update(request, pk):
 
 @login_required
 def user_profile(request):
-    return render(request, 'auth_base.html')
+    return render(request, 'index.html')
+
+
+class CustomLoginView(LoginView):
+    """LoginView с флеш-сообщением"""
+    
+    def form_valid(self, form):
+        """При успешном входе"""
+        messages.success(self.request, 'Вы успешно вошли в систему!')
+        return super().form_valid(form)
+
 
 class CustomLogoutView(LogoutView):
     """LogoutView с флеш-сообщением"""
