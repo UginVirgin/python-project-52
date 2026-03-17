@@ -97,8 +97,8 @@ def create_task(request):
         if executor_id:
             try:
                 executor = User.objects.get(id=executor_id)
-                success['executor'] = f"""✓ Исполнитель: {executor.get_full_name()
-                 or executor.username}"""
+                success['executor'] = f"""✓ Исполнитель: 
+                {executor.get_full_name() or executor.username}"""
             except User.DoesNotExist:
                 errors['executor'] = 'Выбранный исполнитель не существует'
         else:

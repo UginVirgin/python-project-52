@@ -5,6 +5,7 @@ from labels.models import Label
 
 User = get_user_model()
 
+
 class Task(models.Model):
     name = models.CharField(
         max_length=200,

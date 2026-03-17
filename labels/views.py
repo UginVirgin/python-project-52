@@ -62,7 +62,8 @@ def label_delete(request, pk):
         if Task.objects.filter(labels=label).exists():
             messages.error(
                 request, 
-                'Невозможно удалить метку, потому что она используется в задачах'
+                """Невозможно удалить метку, потому 
+                что она используется в задачах"""
             )
             return redirect('labels:label_list')
         
