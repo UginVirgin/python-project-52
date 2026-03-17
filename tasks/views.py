@@ -254,7 +254,7 @@ def task_delete(request, id):
             result = redirect('tasks:tasks')
         else:
             messages.error(request, 'У вас нет прав для удаления этой задачи')
-            result = redirect('tasks:task_detail', id=task.id)
+            result = redirect('tasks:tasks')
         
         return result
     
