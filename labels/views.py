@@ -46,7 +46,7 @@ def label_update(request, pk):
         if name:
             label.name = name
             label.save()
-            messages.success(request, 'Метка успешно обновлена!')
+            messages.success(request, 'Метка успешно изменена')
             return redirect('labels:label_list')
     
     return render(request, 'labels/label_update.html', {

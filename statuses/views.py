@@ -46,7 +46,7 @@ def status_update(request, pk):
         if name:
             status.name = name
             status.save()
-            messages.success(request, 'Статус успешно обновлен!')
+            messages.success(request, 'Статус успешно изменен')
             return redirect('statuses:status_list')
     
     return render(request, 'statuses/status_update.html', {
@@ -69,7 +69,7 @@ def status_delete(request, pk):
             return redirect('statuses:status_list')
         
         status.delete()
-        messages.success(request, 'Статус успешно удален!')
+        messages.success(request, 'Статус успешно удален')
         return redirect('statuses:status_list')
     
     return render(request, 'statuses/status_delete.html', {

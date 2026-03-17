@@ -248,7 +248,7 @@ def task_delete(request, id):
     task = get_object_or_404(Task, id=id)
     
     if request.user != task.creator and not request.user.is_superuser:
-        messages.error(request, 'У вас нет прав для удаления этой задачи')
+        messages.error(request, 'Задачу может удалить только ее автор')
         return redirect('tasks:tasks')
     
     if request.method == 'POST':
