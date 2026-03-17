@@ -54,7 +54,6 @@ def status_update(request, pk):
     })
 
 
-
 @login_required
 def status_delete(request, pk):
     status = get_object_or_404(Status, id=pk)

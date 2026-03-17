@@ -54,7 +54,6 @@ def label_update(request, pk):
     })
 
 
-
 @login_required
 def label_delete(request, pk):
     label = get_object_or_404(Label, id=pk)

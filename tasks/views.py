@@ -76,7 +76,8 @@ def create_task(request):
         
         # Валидация описания (опционально)
         if description and len(description) < 3:
-            errors['description'] = 'Описание должно содержать минимум 3 символа'
+            errors['description'] = """Описание должно содержать
+              минимум 3 символа"""
         elif description:
             success['description'] = '✓ Описание заполнено'
         else:
@@ -96,7 +97,8 @@ def create_task(request):
         if executor_id:
             try:
                 executor = User.objects.get(id=executor_id)
-                success['executor'] = f'✓ Исполнитель: {executor.get_full_name() or executor.username}'
+                success['executor'] = f"""✓ Исполнитель: {executor.get_full_name()
+                 or executor.username}"""
             except User.DoesNotExist:
                 errors['executor'] = 'Выбранный исполнитель не существует'
         else:
@@ -215,8 +217,16 @@ def task_update(request, id):
             
             task.name = name
             task.description = description
-            task.status = Status.objects.get(id=status_id) if status_id else None
-            task.executor = User.objects.get(id=executor_id) if executor_id else None
+
+            if status_id:
+                task.status = Status.objects.get(id=status_id)
+            else:
+                task.status = None
+
+            if executor_id:
+                task.executor = User.objects.get(id=executor_id)
+            else:
+                task.executor = None
             
             task.save()
             

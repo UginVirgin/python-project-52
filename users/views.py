@@ -42,7 +42,9 @@ def users_create(request):
                     first_name=request.POST.get('first_name', ''),
                     last_name=request.POST.get('last_name', '')
                 )
-                messages.success(request, 'Пользователь успешно зарегистрирован')
+                messages.success(request, 
+                                 'Пользователь успешно зарегистрирован'
+                                 )
                 return redirect('login')
             except Exception as e:
                 messages.error(request, f'Ошибка: {e}')
@@ -100,16 +102,21 @@ def user_delete(request, pk):
     
     # Проверка прав - пользователь может удалить только себя
     if request.user.id != user.id:
-        messages.error(request, 'У вас нет прав для удаления этого пользователя')
+        messages.error(request, 
+                       'У вас нет прав для удаления этого пользователя'
+                       )
         return redirect('users:users')
     
     if request.method == 'POST':
-        # Дополнительная проверка: нельзя удалить последнего админа
-        if user.is_superuser and User.objects.filter(is_superuser=True).count() == 1:
-            messages.error(request, 'Нельзя удалить последнего администратора')
-            return redirect('users:users')
+        if user.is_superuser:
+            admin_count = User.objects.filter(is_superuser=True).count()
+            if admin_count == 1:
+                messages.error(
+                    request, 
+                    'Нельзя удалить последнего администратора'
+                )
+                return redirect('users:users')
         
-        username = user.username
         user.delete()
         messages.success(request, f'Пользователь успешно удален')
         return redirect('users:users')

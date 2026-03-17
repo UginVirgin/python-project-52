@@ -31,34 +31,32 @@ class Task(models.Model):
         related_name='tasks'
     )
     
-    # Связь с метками (МНОГИЕ ко МНОГИМ, а не ForeignKey)
-    labels = models.ManyToManyField(  # Измените на ManyToManyField
+    labels = models.ManyToManyField(
         Label,
         blank=True,  # Может быть без меток
         verbose_name='Метки',
         related_name='tasks'  # label.tasks.all()
     )
     
-    # Связь с создателем
     creator = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Автор',
-        related_name='created_tasks'  # user.created_tasks.all()
+        related_name='created_tasks'
     )
     
-    # Добавьте исполнителя (опционально)
     executor = models.ForeignKey(
         User,
-        on_delete=models.SET_NULL,  # При удалении пользователя - сделать NULL
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         verbose_name='Исполнитель',
-        related_name='assigned_tasks'  # user.assigned_tasks.all()
+        related_name='assigned_tasks'
     )
     
     def __str__(self):
-        return f'{self.name} ({self.status.name if self.status else "без статуса"})'
+        return f"""{self.name} 
+        ({self.status.name if self.status else "без статуса"})"""
 
     class Meta:
         verbose_name = 'Задача'
