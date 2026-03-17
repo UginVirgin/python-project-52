@@ -94,7 +94,7 @@ class CustomLoginView(LoginView):
     
     def form_valid(self, form):
         """При успешном входе"""
-        messages.success(self.request, 'Вы успешно вошли в систему!')
+        messages.success(self.request, 'Вы залогинены')
         return super().form_valid(form)
 
 
