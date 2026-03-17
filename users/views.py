@@ -118,7 +118,7 @@ def user_delete(request, pk):
                 return redirect('users:users')
         
         user.delete()
-        messages.success(request, f'Пользователь успешно удален')
+        messages.success(request, 'Пользователь успешно удален')
         return redirect('users:users')
     
     return render(request, 'users/user_delete.html', {'user': user})
