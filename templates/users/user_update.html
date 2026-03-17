@@ -7,27 +7,27 @@
     {% csrf_token %}
     
     <div class="mb-3">
-        <label>Имя пользователя *</label>
-        <input type="text" name="username" class="form-control" 
+        <label for="id_username">Имя пользователя *</label>
+        <input type="text" name="username" id="id_username" class="form-control" 
                value="{{ user.username }}" required>
     </div>
     
     <div class="mb-3">
-        <label>Email</label>
-        <input type="email" name="email" class="form-control" 
-               value="{{ user.email|default:'' }}">
-    </div>
-    
-    <div class="mb-3">
-        <label>Имя</label>
-        <input type="text" name="first_name" class="form-control" 
+        <label for="id_first_name">Имя</label>
+        <input type="text" name="first_name" id="id_first_name" class="form-control" 
                value="{{ user.first_name|default:'' }}">
     </div>
     
     <div class="mb-3">
-        <label>Фамилия</label>
-        <input type="text" name="last_name" class="form-control" 
+        <label for="id_last_name">Фамилия</label>
+        <input type="text" name="last_name" id="id_last_name" class="form-control" 
                value="{{ user.last_name|default:'' }}">
+    </div>
+    
+    <div class="mb-3">
+        <label for="id_password">Пароль</label>
+        <input type="password" name="password" id="id_password" class="form-control">
+        <small class="text-muted">Оставьте пустым, если не хотите менять пароль</small>
     </div>
     
     <button type="submit" class="btn btn-primary">Сохранить</button>
