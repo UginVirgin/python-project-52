@@ -4,7 +4,7 @@ from django.contrib import messages
 from statuses.models import Status
 from labels.models import Label
 from tasks.models import Task
-from users.models import AbstractUser # noqa: F401
+from users.models import AbstractUser  # noqa: F401
 
 
 def tasks(request):
@@ -34,14 +34,6 @@ def tasks(request):
     return render(request, 'tasks/tasks.html', context)
 
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import get_user_model
-from statuses.models import Status
-from labels.models import Label
-from tasks.models import Task
-
-
 def create_task(request):
     if request.method == 'GET':
         return handle_get_create_task(request)
@@ -62,7 +54,7 @@ def handle_get_create_task(request):
 def handle_post_create_task(request):
     User = get_user_model()
     form_data = extract_form_data(request)
-    validation_result = validate_task_data(request, form_data, User)
+    validation_result = validate_task_data(form_data, User)
     
     if validation_result['errors']:
         return render_with_errors(request, form_data, validation_result)
@@ -80,7 +72,7 @@ def extract_form_data(request):
     }
 
 
-def validate_task_data(request, form_data, User):
+def validate_task_data(form_data, User):
     errors = {}
     success = {}
     
@@ -137,7 +129,8 @@ def validate_executor(executor_id, errors, success, User):
     
     try:
         executor = User.objects.get(id=executor_id)
-        success['executor'] = f'✓ Исполнитель: {executor.get_full_name() or executor.username}'
+        full_name = executor.get_full_name() or executor.username
+        success['executor'] = f'✓ Исполнитель: {full_name}'
         return executor
     except User.DoesNotExist:
         errors['executor'] = 'Выбранный исполнитель не существует'
@@ -196,8 +189,8 @@ def create_new_task(request, form_data, validation_result, User):
             'labels': Label.objects.all()
         }
         return render(request, "tasks/task_create.html", context)
-            
-            
+
+
 def task_detail(request, id):
     task = get_object_or_404(Task, id=id)
     context = {
@@ -210,15 +203,12 @@ def task_update(request, id):
     task = get_object_or_404(Task, id=id)
     
     if request.method == 'GET':
-        statuses = Status.objects.all()
         User = get_user_model()
-        executors = User.objects.all()
-        labels = Label.objects.all()
         context = {
             'task': task,
-            'statuses': statuses,
-            'executors': executors,
-            'labels': labels
+            'statuses': Status.objects.all(),
+            'executors': User.objects.all(),
+            'labels': Label.objects.all()
         }
         return render(request, "tasks/task_update.html", context)
     
@@ -235,14 +225,11 @@ def task_update(request, id):
             if Task.objects.filter(name=name).exclude(id=task.id).exists():
                 messages.error(request, 'Задача с таким именем уже существует')
                 
-                statuses = Status.objects.all()
-                executors = User.objects.all()
-                labels = Label.objects.all()
                 context = {
                     'task': task,
-                    'statuses': statuses,
-                    'executors': executors,
-                    'labels': labels,
+                    'statuses': Status.objects.all(),
+                    'executors': User.objects.all(),
+                    'labels': Label.objects.all(),
                     'form_data': request.POST
                 }
                 return render(request, "tasks/task_update.html", context)
@@ -273,14 +260,11 @@ def task_update(request, id):
         except Exception as e:
             messages.error(request, f'Ошибка при изменении задачи: {e}')
             
-            statuses = Status.objects.all()
-            executors = User.objects.all()
-            labels = Label.objects.all()
             context = {
                 'task': task,
-                'statuses': statuses,
-                'executors': executors,
-                'labels': labels,
+                'statuses': Status.objects.all(),
+                'executors': User.objects.all(),
+                'labels': Label.objects.all(),
                 'form_data': request.POST
             }
             return render(request, "tasks/task_update.html", context)
