@@ -64,7 +64,8 @@ def status_delete(request, pk):
             tasks_count = Task.objects.filter(status=status).count()
             messages.error(
                 request, 
-                f'Невозможно удалить статус, потому что он используется в {tasks_count} задаче(ах)'
+                f"""Невозможно удалить статус, потому что он 
+                используется в {tasks_count} задаче(ах)"""
             )
             return redirect('statuses:status_list')
         
