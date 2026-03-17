@@ -102,5 +102,5 @@ class CustomLogoutView(LogoutView):
     """LogoutView с флеш-сообщением"""
     
     def dispatch(self, request, *args, **kwargs):
-        messages.success(request, 'Вы успешно вышли из системы!')
+        messages.success(request, 'Вы разлогинены')
         return super().dispatch(request, *args, **kwargs)
