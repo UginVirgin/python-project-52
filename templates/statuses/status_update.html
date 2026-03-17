@@ -30,7 +30,7 @@
         
         <div class="mt-4">
             <button type="submit" class="btn btn-primary">
-                {% if status %}Сохранить{% else %}Создать{% endif %}
+                {% if status %}Изменить{% else %}Создать{% endif %}
             </button>
             <a href="{% url 'statuses:status_list' %}" class="btn btn-secondary ms-2">
                 Отмена

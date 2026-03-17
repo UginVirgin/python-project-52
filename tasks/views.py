@@ -247,15 +247,13 @@ def task_update(request, id):
 def task_delete(request, id):
     task = get_object_or_404(Task, id=id)
     
+    if request.user != task.creator and not request.user.is_superuser:
+        messages.error(request, 'У вас нет прав для удаления этой задачи')
+        return redirect('tasks:tasks')
+    
     if request.method == 'POST':
-        if request.user == task.creator or request.user.is_superuser:
-            task.delete()
-            messages.success(request, 'Задача успешно удалена')
-            result = redirect('tasks:tasks')
-        else:
-            messages.error(request, 'У вас нет прав для удаления этой задачи')
-            result = redirect('tasks:tasks')
-        
-        return result
+        task.delete()
+        messages.success(request, 'Задача успешно удалена')
+        return redirect('tasks:tasks')
     
     return render(request, 'tasks/task_delete.html', {'task': task})
