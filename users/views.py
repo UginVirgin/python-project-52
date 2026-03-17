@@ -78,7 +78,7 @@ def user_update(request, pk):
         user.last_name = request.POST.get('last_name', '')
         user.save()
         
-        messages.success(request, 'Пользователь обновлен')
+        messages.success(request, 'Пользователь успешно изменен')
         return redirect('users:users')
     
     return render(request, 'users/user_update.html', {'user': user})
