@@ -250,10 +250,12 @@ def task_delete(request, id):
     if request.method == 'POST':
         if request.user == task.creator or request.user.is_superuser:
             task.delete()
-            messages.success(request, 'Задача успешно удалена!')
+            messages.success(request, 'Задача успешно удалена')
+            result = redirect('tasks:tasks')
         else:
             messages.error(request, 'У вас нет прав для удаления этой задачи')
+            result = redirect('tasks:task_detail', id=task.id)
         
-        return redirect('tasks:tasks')
+        return result
     
     return render(request, 'tasks/task_delete.html', {'task': task})
