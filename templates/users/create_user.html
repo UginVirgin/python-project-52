@@ -59,21 +59,6 @@
                     Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.
                 </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="id_email">Email</label>
-                <input type="email" name="email" maxlength="254" 
-                       class="form-control {% if errors.email %}is-invalid{% endif %}" 
-                       placeholder="example@mail.com" 
-                       value="{{ form_data.email|default:'' }}"
-                       required 
-                       id="id_email">
-                {% if errors.email %}
-                    <div class="invalid-feedback">
-                        {{ errors.email }}
-                    </div>
-                {% endif %}
-            </div>
             
             <div class="mb-3">
                 <label class="form-label" for="id_password1">Пароль</label>
