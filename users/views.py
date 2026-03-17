@@ -45,7 +45,7 @@ def users_create(request):
                     email=email
                 )
                 messages.success(request, 'Пользователь успешно создан!')
-                return redirect('users:users')
+                return redirect('login')
             except Exception as e:
                 messages.error(request, f'Ошибка: {e}')
         
