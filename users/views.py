@@ -24,7 +24,6 @@ def users_create(request):
         username = request.POST.get('username')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-        email = request.POST.get('email')
         
         if password1 != password2:
             errors['password2'] = 'Пароли не совпадают'
@@ -41,8 +40,7 @@ def users_create(request):
                     username=username,
                     password=password1,
                     first_name=request.POST.get('first_name', ''),
-                    last_name=request.POST.get('last_name', ''),
-                    email=email
+                    last_name=request.POST.get('last_name', '')
                 )
                 messages.success(request, 'Пользователь успешно зарегистрирован')
                 return redirect('login')
@@ -62,7 +60,6 @@ def user_update(request, pk):
     
     if request.method == 'POST':
         username = request.POST.get('username')
-        email = request.POST.get('email')
         
         if not username:
             messages.error(request, 'Имя пользователя обязательно')
@@ -73,7 +70,6 @@ def user_update(request, pk):
             return render(request, 'users/user_update.html', {'user': user})
         
         user.username = username
-        user.email = email
         user.first_name = request.POST.get('first_name', '')
         user.last_name = request.POST.get('last_name', '')
         user.save()
