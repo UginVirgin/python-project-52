@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление пользователя - Менеджер задач{% endblock %}
+
+{% block content %}
+<div class="container wrapper flex-grow-1">
+    <h1 class="my-4">Удаление пользователя</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <p>Вы уверены, что хотите удалить пользователя <strong>{{ user.username }}</strong>?</p>
+            <p class="text-danger">Это действие нельзя отменить!</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger" value="Да, удалить">
+                <a href="{% url 'users:users' %}" class="btn btn-secondary">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

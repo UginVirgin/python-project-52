@@ -79,7 +79,7 @@ def user_update(request, pk):
         user.save()
         
         messages.success(request, 'Пользователь обновлен')
-        return redirect('users')
+        return redirect('users:users')
     
     return render(request, 'users/user_update.html', {'user': user})
 
@@ -96,6 +96,29 @@ class CustomLoginView(LoginView):
         """При успешном входе"""
         messages.success(self.request, 'Вы залогинены')
         return super().form_valid(form)
+    
+
+@login_required
+def user_delete(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    
+    # Проверка прав - пользователь может удалить только себя
+    if request.user.id != user.id:
+        messages.error(request, 'У вас нет прав для удаления этого пользователя')
+        return redirect('users:users')
+    
+    if request.method == 'POST':
+        # Дополнительная проверка: нельзя удалить последнего админа
+        if user.is_superuser and User.objects.filter(is_superuser=True).count() == 1:
+            messages.error(request, 'Нельзя удалить последнего администратора')
+            return redirect('users:users')
+        
+        username = user.username
+        user.delete()
+        messages.success(request, f'Пользователь {username} успешно удален')
+        return redirect('users:users')
+    
+    return render(request, 'users/user_delete.html', {'user': user})
 
 
 class CustomLogoutView(LogoutView):
