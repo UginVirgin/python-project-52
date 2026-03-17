@@ -79,7 +79,11 @@ def validate_task_data(form_data, User):
     validate_name(form_data['name'], errors, success)
     validate_description(form_data['description'], errors, success)
     status = validate_status(form_data['status_id'], errors, success)
-    executor = validate_executor(form_data['executor_id'], errors, success, User)
+    executor = validate_executor(form_data['executor_id'], 
+                                 errors, 
+                                 success, 
+                                 User
+                                 )
     validate_labels(form_data['labels_ids'], errors, success)
     
     return {
