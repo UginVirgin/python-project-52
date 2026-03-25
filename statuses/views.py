@@ -16,14 +16,12 @@ class StatusListView(ListView):
 
 
 class StatusCreateView(CreateView):
-    """Создание нового статуса"""
     model = Status
     form_class = StatusForm
     template_name = 'statuses/status_form.html'
     success_url = reverse_lazy('statuses:status_list')
     
     def form_valid(self, form):
-        """При успешном создании статуса"""
         messages.success(self.request, 'Статус успешно создан')
         return super().form_valid(form)
 

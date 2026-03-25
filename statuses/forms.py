@@ -1,4 +1,3 @@
-# statuses/forms.py
 from django import forms
 from .models import Status
 
@@ -6,8 +5,7 @@ from .models import Status
 class StatusForm(forms.ModelForm):
     class Meta:
         model = Status
-        fields = ['name']  # если у статуса только имя
-        # fields = ['name', 'description']  # если есть еще поля
+        fields = ['name']
         
         widgets = {
             'name': forms.TextInput(attrs={

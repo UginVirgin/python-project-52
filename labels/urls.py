@@ -4,8 +4,14 @@ from labels import views
 app_name = 'labels'
 
 urlpatterns = [
-    path("", views.labels, name='label_list'),
-    path("create/", views.label_create, name='label_create'),
-    path("<int:pk>/update/", views.label_update, name='label_update'),
-    path("<int:pk>/delete/", views.label_delete, name='label_delete')
+    path("", views.LabelListView.as_view(), name='label_list'),
+    path("create/", 
+         views.LabelCreateView.as_view(), 
+         name='label_create'),
+    path("<int:pk>/update/", 
+        views.LabelUpdateView.as_view(), 
+        name='label_update'),
+    path("<int:pk>/delete/", 
+         views.DeleteLabelView.as_view(), 
+         name='label_delete')
 ]
