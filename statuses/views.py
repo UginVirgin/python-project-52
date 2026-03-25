@@ -3,6 +3,10 @@ from statuses.models import Status
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from tasks.models import Task 
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+from .models import Status
+from .forms import StatusForm
 
 
 def statuses(request):
@@ -11,30 +15,18 @@ def statuses(request):
     return render(request, 'statuses/statuses.html', context)
 
 
-def status_create(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
+class StatusCreateView(CreateView):
+    """Создание нового статуса"""
+    model = Status
+    form_class = StatusForm
+    template_name = 'statuses/status_form.html'
+    success_url = reverse_lazy('statuses:status_list')
+    
+    def form_valid(self, form):
+        """При успешном создании статуса"""
+        messages.success(self.request, f'Статус успешно создан!')
+        return super().form_valid(form)
 
-        if Status.objects.filter(name=name).exists():
-            context = {
-                'error_name': 'Статус с таким именем уже существует',
-                'form_data': {'name': name}
-            }
-            return render(request, 'statuses/status_create.html', context)
-        
-        try:
-            Status.objects.create(name=name)
-            messages.success(request, 'Статус успешно создан!')
-            return redirect('statuses:status_list')
-        except Exception as e:
-            messages.error(request, f'Ошибка при создании статуса: {e}')
-            context = {
-                'error_name': str(e),
-                'form_data': {'name': name}
-            }
-            return render(request, 'statuses/status_create.html', context)
-
-    return render(request, 'statuses/status_create.html')
 
 
 @login_required
