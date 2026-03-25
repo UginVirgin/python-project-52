@@ -2,6 +2,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from django.urls import reverse_lazy
+from django.contrib.messages import constants as messages
+
 
 load_dotenv()
 
@@ -122,8 +124,6 @@ STATIC_URL = "static/"
 LOGIN_REDIRECT_URL = reverse_lazy('users:user_profile')
 
 LOGOUT_REDIRECT_URL = '/' 
-
-from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {
     messages.SUCCESS: 'success',

@@ -3,3 +3,9 @@ run:
 
 migrations:
 	python manage.py migrate
+
+make lint:
+	ruff check .
+
+make lint-fix:
+	ruff check --fix .
