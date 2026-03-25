@@ -9,8 +9,8 @@ class LabelForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={
-                'class':'form-control',
-                'placeholder':'Имя',
+                'class': 'form-control',
+                'placeholder': 'Имя',
                 'max_lenght': '100'
             })
         }
