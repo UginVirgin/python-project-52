@@ -51,4 +51,4 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             return redirect('statuses:status_list')
         else:
             messages.success(self.request, 'Статус успешно удален')
-            return super().form_valid(self.request, form)
+            return super().form_valid(form)
