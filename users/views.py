@@ -6,7 +6,7 @@ from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserForm
 from django.urls import reverse_lazy
 
 
@@ -23,7 +23,7 @@ class UserListView(ListView):
 
 class UserCreateView(CreateView):
     model = User
-    form_class = CustomUserCreationForm
+    form_class = CustomUserForm
     template_name = 'users/user_form.html'
     success_url = reverse_lazy('login')
 
@@ -38,7 +38,7 @@ class UserCreateView(CreateView):
 
 class UserUpdateView(UpdateView):
     model = User
-    form_class = CustomUserChangeForm
+    form_class = CustomUserForm
     template_name = 'users/user_form.html'
     success_url = reverse_lazy('users:users')
 
@@ -62,7 +62,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
-    success_url = reverse_lazy('users:profile') 
+    success_url = reverse_lazy('users:user_profile') 
     def form_valid(self, form):
         messages.success(self.request, 'Вы залогинены')
         return super().form_valid(form)

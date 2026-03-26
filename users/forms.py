@@ -1,51 +1,39 @@
 # users/forms.py
 from django import forms
-from django.contrib.auth.models import User 
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 
-class CustomUserCreationForm(UserCreationForm):
-    """Форма регистрации пользователя (с паролем)"""
+class CustomUserForm(UserCreationForm):
+    """Универсальная форма для регистрации и редактирования"""
     
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username']
-
         widgets = {
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Имя',
-                'maxlength': '150'
+                'placeholder': 'Имя'
             }),
             'last_name': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Фамилия',
-                'maxlength': '150'  # ← исправлено: maxlength, а не max_ength
+                'placeholder': 'Фамилия'
             }),
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Имя пользователя',
-                'maxlength': '150'
+                'placeholder': 'Имя пользователя'
             }),
         }
-
         labels = {
             'first_name': 'Имя',
-            'last_name': 'Фамилия', 
-            'username': 'Имя пользователя'
-        }
-
-        error_messages = {
-            'username': {
-                'required': 'Имя пользователя обязательно',
-                'unique': 'Пользователь с таким именем уже существует',
-                'max_length': 'Имя не должно превышать 150 символов',
-            },
+            'last_name': 'Фамилия',
+            'username': 'Имя пользователя',
         }
     
     def __init__(self, *args, **kwargs):
-        """Добавляем виджеты для полей пароля"""
         super().__init__(*args, **kwargs)
+        
+        # Настройка полей пароля
         self.fields['password1'].widget = forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Пароль'
@@ -54,48 +42,16 @@ class CustomUserCreationForm(UserCreationForm):
             'class': 'form-control',
             'placeholder': 'Подтверждение пароля'
         })
-        # Добавляем метки для полей пароля
         self.fields['password1'].label = 'Пароль'
         self.fields['password2'].label = 'Подтверждение пароля'
-
-
-class CustomUserChangeForm(UserChangeForm):
-    """Форма редактирования профиля пользователя (без пароля)"""
     
-    password = None  # убираем поле пароля
-    
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'username']
+    def save(self, commit=True):
+        user = super().save(commit=False)
         
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Имя',
-                'maxlength': '150'
-            }),
-            'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Фамилия',
-                'maxlength': '150'
-            }),
-            'username': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Имя пользователя',
-                'maxlength': '150'
-            }),
-        }
+        # Пароль всегда берем из формы
+        password = self.cleaned_data.get('password1')
+        user.set_password(password)
         
-        labels = {
-            'first_name': 'Имя',
-            'last_name': 'Фамилия',
-            'username': 'Имя пользователя',
-        }
-        
-        error_messages = {
-            'username': {
-                'required': 'Имя пользователя обязательно',
-                'unique': 'Пользователь с таким именем уже существует',
-                'max_length': 'Имя не должно превышать 150 символов',
-            },
-        }
+        if commit:
+            user.save()
+        return user
