@@ -25,7 +25,7 @@
             <td>{{ user.first_name|default:"—" }}</td>
             <td>{{ user.last_name|default:"—" }}</td>
             <td>{{ user.date_joined|date:"d.m.Y H:i" }}</td>
-            {% if object %}
+            {% if request.user.is_authenticated %}
             <td>
                 <a href="{% url 'users:user_update' user.id %}" class="text-decoration-none me-2">
                     Изменить
