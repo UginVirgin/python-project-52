@@ -34,9 +34,9 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        messages.error(self.request, 
-                       'Ошибка при регистрации. Проверьте правильность заполнения.'
-                       )
+        messages.error(self.request, '''
+            Ошибка при регистрации. Проверьте правильность заполнения.
+                       ''')
         return super().form_invalid(form)
 
 
