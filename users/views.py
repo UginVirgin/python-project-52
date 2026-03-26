@@ -4,129 +4,98 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+from django.urls import reverse_lazy
 
 
 def index(request):
     return render(request, 'index.html')
 
 
-def users(request):
-    User = get_user_model()
-    users = User.objects.all()
-    return render(request, 'users/users.html', context={'users': users})
+class UserListView(ListView):
+    model = User
+    template_name = 'users/users.html'
+    context_object_name = 'users'
+    ordering = ['username']
 
 
-def users_create(request):
-    form_data = request.POST if request.method == 'POST' else None
-    errors = {}
+class UserCreateView(CreateView):
+    model = User
+    form_class = CustomUserCreationForm
+    template_name = 'users/user_form.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Пользователь успешно зарегистрирован')
+        return super().form_valid(form)
     
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        
-        if password1 != password2:
-            errors['password2'] = 'Пароли не совпадают'
-        
-        if User.objects.filter(username=username).exists():
-            errors['username'] = 'Пользователь с таким именем уже существует'
-        
-        if not username:
-            errors['username'] = 'Имя пользователя обязательно'
-        
-        if not errors:
-            try:
-                User.objects.create_user(
-                    username=username,
-                    password=password1,
-                    first_name=request.POST.get('first_name', ''),
-                    last_name=request.POST.get('last_name', '')
-                )
-                messages.success(request, 
-                                 'Пользователь успешно зарегистрирован'
-                                 )
-                return redirect('login')
-            except Exception as e:
-                messages.error(request, f'Ошибка: {e}')
-        
-        form_data = request.POST
+    def form_invalid(self, form):
+        messages.error(self.request, 'Ошибка при регистрации. Проверьте правильность заполнения.')
+        return super().form_invalid(form)
+
+
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = CustomUserChangeForm
+    template_name = 'users/user_form.html'
+    success_url = reverse_lazy('users:users')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Пользователь успешно обновлен')
+        return super().form_valid(form)
     
-    return render(request, 'users/create_user.html', {
-        'form_data': form_data,
-        'errors': errors
-    })
+    def form_invalid(self, form):
+        messages.error(self.request, 'Ошибка при обновлении. Проверьте правильность заполнения.')
+        return super().form_invalid(form)
 
 
-def user_update(request, pk):
-    user = get_object_or_404(User, pk=pk)
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/user_profile.html'
     
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        
-        if not username:
-            messages.error(request, 'Имя пользователя обязательно')
-            return render(request, 'users/user_update.html', {'user': user})
-        
-        if User.objects.filter(username=username).exclude(pk=pk).exists():
-            messages.error(request, 'Имя пользователя уже занято')
-            return render(request, 'users/user_update.html', {'user': user})
-        
-        user.username = username
-        user.first_name = request.POST.get('first_name', '')
-        user.last_name = request.POST.get('last_name', '')
-        user.save()
-        
-        messages.success(request, 'Пользователь успешно изменен')
-        return redirect('users:users')
-    
-    return render(request, 'users/user_update.html', {'user': user})
-
-
-@login_required
-def user_profile(request):
-    return render(request, 'index.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context
 
 
 class CustomLoginView(LoginView):
-    """LoginView с флеш-сообщением"""
-    
+    template_name = 'registration/login.html'
+    success_url = reverse_lazy('users:profile') 
     def form_valid(self, form):
-        """При успешном входе"""
         messages.success(self.request, 'Вы залогинены')
         return super().form_valid(form)
-    
 
-@login_required
-def user_delete(request, pk):
-    user = get_object_or_404(User, pk=pk)
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    template_name = 'users/user_delete.html'
+    success_url = reverse_lazy('users:users')
+    context_object_name = 'user'
     
-    # Проверка прав - пользователь может удалить только себя
-    if request.user.id != user.id:
-        messages.error(request, 
-                       'У вас нет прав для удаления этого пользователя'
-                       )
-        return redirect('users:users')
+    def get_object(self, queryset=None):
+        return get_object_or_404(User, pk=self.kwargs['pk'])
     
-    if request.method == 'POST':
-        if user.is_superuser:
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        
+        if request.user.id != self.object.id:
+            messages.error(request, 'У вас нет прав для удаления этого пользователя')
+            return redirect('users:users')
+        
+        if self.object.is_superuser:
             admin_count = User.objects.filter(is_superuser=True).count()
             if admin_count == 1:
-                messages.error(
-                    request, 
-                    'Нельзя удалить последнего администратора'
-                )
+                messages.error(request, 'Нельзя удалить последнего администратора')
                 return redirect('users:users')
         
-        user.delete()
-        messages.success(request, 'Пользователь успешно удален')
-        return redirect('users:users')
-    
-    return render(request, 'users/user_delete.html', {'user': user})
+        username = self.object.username
+        messages.success(request, f'Пользователь "{username}" успешно удален')
+        return super().delete(request, *args, **kwargs)
 
 
-class CustomLogoutView(LogoutView):
-    """LogoutView с флеш-сообщением"""
-    
+class CustomLogoutView(LogoutView):    
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, 'Вы разлогинены')
         return super().dispatch(request, *args, **kwargs)
