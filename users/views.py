@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LogoutView, LoginView
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, TemplateView
+from django.views.generic import (CreateView, 
+                                  ListView, 
+                                  UpdateView, 
+                                  DeleteView, 
+                                  TemplateView)
 from .forms import CustomUserForm
 from django.urls import reverse_lazy
 
@@ -32,7 +34,9 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        messages.error(self.request, 'Ошибка при регистрации. Проверьте правильность заполнения.')
+        messages.error(self.request, 
+                       'Ошибка при регистрации. Проверьте правильность заполнения.'
+                       )
         return super().form_invalid(form)
 
 
@@ -47,7 +51,9 @@ class UserUpdateView(UpdateView):
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        messages.error(self.request, 'Ошибка при обновлении. Проверьте правильность заполнения.')
+        messages.error(self.request, 
+            'Ошибка при обновлении. Проверьте правильность заполнения.'
+            )
         return super().form_invalid(form)
 
 
@@ -62,7 +68,8 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
-    success_url = reverse_lazy('users:user_profile') 
+    success_url = reverse_lazy('users:user_profile')
+
     def form_valid(self, form):
         messages.success(self.request, 'Вы залогинены')
         return super().form_valid(form)
@@ -81,13 +88,17 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
         self.object = self.get_object()
         
         if self.request.user.id != self.object.id:
-            messages.error(self.request, 'У вас нет прав для удаления этого пользователя')
+            messages.error(self.request, 
+                           'У вас нет прав для удаления этого пользователя'
+                           )
             return redirect('users:users')
         
         if self.object.is_superuser:
             admin_count = User.objects.filter(is_superuser=True).count()
             if admin_count == 1:
-                messages.error(self.request, 'Нельзя удалить последнего администратора')
+                messages.error(self.request, 
+                               'Нельзя удалить последнего администратора'
+                               )
                 return redirect('users:users')
         
         response = super().form_valid(form)        
