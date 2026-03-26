@@ -43,7 +43,7 @@ class UserUpdateView(UpdateView):
     success_url = reverse_lazy('users:users')
 
     def form_valid(self, form):
-        messages.success(self.request, 'Пользователь успешно обновлен')
+        messages.success(self.request, 'Пользователь успешно изменен')
         return super().form_valid(form)
     
     def form_invalid(self, form):
