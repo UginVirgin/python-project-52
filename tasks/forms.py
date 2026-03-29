@@ -34,7 +34,7 @@ class TaskForm(forms.ModelForm):
             }),
         }
         labels = {
-            'name': 'Название',
+            'name': 'Имя',
             'description': 'Описание',
             'status': 'Статус',
             'executor': 'Исполнитель',
@@ -49,7 +49,7 @@ class TaskSearchForm(forms.Form):
             'class': 'form-control',
             'placeholder': 'Поиск по названию'
         }),
-        label='Название'
+        label='Имя'
     )
     
     status = forms.ModelChoiceField(
