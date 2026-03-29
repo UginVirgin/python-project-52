@@ -34,9 +34,9 @@ class Task(models.Model):
     
     labels = models.ManyToManyField(
         Label,
-        blank=True,  # Может быть без меток
+        blank=True,
         verbose_name='Метки',
-        related_name='tasks'  # label.tasks.all()
+        related_name='tasks'
     )
     
     creator = models.ForeignKey(

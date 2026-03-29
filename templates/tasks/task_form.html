@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container wrapper flex-grow-1">
+  <h1 class="my-4">{{ title|default:"Создать задачу" }}</h1>
+  
+  <form method="post">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+      {{ form.name }}
+      {% if form.name.errors %}
+        <div class="invalid-feedback d-block">
+          {{ form.name.errors.0 }}
+        </div>
+      {% endif %}
+      {% if form.name.help_text %}
+        <div class="form-text">{{ form.name.help_text }}</div>
+      {% endif %}
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+      {{ form.description }}
+      {% if form.description.errors %}
+        <div class="invalid-feedback d-block">
+          {{ form.description.errors.0 }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+      {{ form.status }}
+      {% if form.status.errors %}
+        <div class="invalid-feedback d-block">
+          {{ form.status.errors.0 }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.executor.id_for_label }}">{{ form.executor.label }}</label>
+      {{ form.executor }}
+      {% if form.executor.errors %}
+        <div class="invalid-feedback d-block">
+          {{ form.executor.errors.0 }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.labels.id_for_label }}">{{ form.labels.label }}</label>
+      {{ form.labels }}
+      {% if form.labels.errors %}
+        <div class="invalid-feedback d-block">
+          {{ form.labels.errors.0 }}
+        </div>
+      {% endif %}
+      <div class="form-text">Для выбора нескольких меток зажмите Ctrl (Cmd на Mac)</div>
+    </div>
+    
+    <input class="btn btn-primary" type="submit" value="{{ button_text|default:'Создать' }}">
+    <a href="{% url 'tasks:tasks' %}" class="btn btn-secondary">Отмена</a>
+  </form>
+</div>
+{% endblock %}

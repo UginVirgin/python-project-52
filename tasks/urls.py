@@ -4,9 +4,9 @@ from tasks import views
 app_name = 'tasks'
 
 urlpatterns = [
-    path("", views.tasks, name='tasks'),
-    path("create/", views.create_task, name="create_task"),
-    path("<int:id>/", views.task_detail, name="task_detail"),
-    path("<int:id>/update/", views.task_update, name="task_update"),
-    path("<int:id>/delete/", views.task_delete, name="task_delete"),
+    path("", views.TaskListView.as_view(), name='tasks'),
+    path("create/", views.TaskCreateView.as_view(), name="create_task"),
+    path("<int:id>/", views.TaskDetailView.as_view(), name="task_detail"),
+    path("<int:id>/update/", views.TaskUpdateView.as_view(), name="task_update"),
+    path("<int:id>/delete/", views.TaskDeleteView.as_view(), name="task_delete"),
 ]
