@@ -90,8 +90,8 @@
           <td>{{ task.status.name }}</td>
           <td>{{ task.creator.get_full_name|default:task.creator.username }}</td>
           <td>
-            {% if task.assigned_to %}
-              {{ task.assigned_to.get_full_name|default:task.assigned_to.username }}
+            {% if task.executor %}
+              {{ task.executor.get_full_name|default:task.executor.username }}
             {% else %}
               Не назначен
             {% endif %}
