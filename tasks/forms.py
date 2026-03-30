@@ -9,6 +9,14 @@ User = get_user_model()
 
 
 class TaskForm(forms.ModelForm):
+    # Явно определяем поле executor с кастомным отображением
+    executor = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        label='Исполнитель',
+        required=False,
+        empty_label="---------"
+    )
+    
     class Meta:
         model = Task
         fields = ['name', 'description', 'status', 'executor', 'labels']
@@ -25,9 +33,7 @@ class TaskForm(forms.ModelForm):
             'status': forms.Select(attrs={
                 'class': 'form-select'
             }),
-            'executor': forms.Select(attrs={
-                'class': 'form-select'
-            }),
+            # Убираем executor из widgets, так как он определен выше
             'labels': forms.SelectMultiple(attrs={
                 'class': 'form-select',
                 'size': '5'
@@ -40,6 +46,17 @@ class TaskForm(forms.ModelForm):
             'executor': 'Исполнитель',
             'labels': 'Метки',
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Кастомное отображение опций: показываем full_name или username
+        self.fields['executor'].label_from_instance = self.get_user_label
+    
+    def get_user_label(self, user):
+        """Возвращает текст для отображения в выпадающем списке"""
+        if user.get_full_name():
+            return user.get_full_name()
+        return user.username
 
 
 class TaskSearchForm(forms.Form):
