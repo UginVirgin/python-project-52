@@ -3,7 +3,13 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import (
+    ListView, 
+    CreateView, 
+    UpdateView, 
+    DeleteView, 
+    DetailView
+    )
 from statuses.models import Status
 from labels.models import Label
 from tasks.models import Task
@@ -63,7 +69,9 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         return response
     
     def form_invalid(self, form):
-        messages.error(self.request, 'Ошибка при создании задачи. Проверьте правильность заполнения полей.')
+        messages.error(self.request, '''
+        Ошибка при создании задачи. Проверьте правильность заполнения полей.
+        ''')
         return super().form_invalid(form)
 
 
@@ -86,7 +94,9 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
         return response
     
     def form_invalid(self, form):
-        messages.error(self.request, 'Ошибка при изменении задачи. Проверьте правильность заполнения полей.')
+        messages.error(self.request, '''
+        Ошибка при изменении задачи. Проверьте правильность заполнения полей.
+        ''')
         return super().form_invalid(form)
 
 
