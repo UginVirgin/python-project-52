@@ -9,7 +9,8 @@ User = get_user_model()
 class Task(models.Model):
     name = models.CharField(
         max_length=200,
-        verbose_name='Имя задачи'
+        verbose_name='Имя задачи',
+        unique=True 
     )
     description = models.TextField(
         blank=True,
