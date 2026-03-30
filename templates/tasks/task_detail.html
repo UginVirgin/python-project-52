@@ -20,7 +20,7 @@
                             <td><strong>Исполнитель:</strong></td>
                             <td>
                                 {% if task.executor %}
-                                    {{ user.username }}
+                                    {{ task.executor.get_full_name|default:task.executor.username }}
                                 {% else %}
                                     <span class="text-muted">Не назначен</span>
                                 {% endif %}
