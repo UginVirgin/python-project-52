@@ -2,6 +2,7 @@ from django.urls import reverse
 from labels.models import Label
 from .base import BaseTestCase
 
+
 class LabelsTest(BaseTestCase):
     @classmethod
     def setUpTestData(cls):

@@ -4,6 +4,7 @@ from .base import BaseTestCase
 
 User = get_user_model()
 
+
 class UsersViewsTest(BaseTestCase):
     def test_user_list_view(self):
         response = self.client.get(reverse('users:users'))
@@ -29,7 +30,8 @@ class UsersViewsTest(BaseTestCase):
 
     def test_user_update_view_own_profile(self):
         self.login()
-        response = self.client.post(reverse('users:user_update', args=[self.test_user.pk]), {
+        response = self.client.post(reverse(
+            'users:user_update', args=[self.test_user.pk]), {
             'username': 'updateduser',
             'first_name': 'Updated',
             'last_name': 'User',

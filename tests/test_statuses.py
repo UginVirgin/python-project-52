@@ -2,6 +2,7 @@ from django.urls import reverse
 from statuses.models import Status
 from .base import BaseTestCase
 
+
 class StatusesTest(BaseTestCase):
     @classmethod
     def setUpTestData(cls):
@@ -20,7 +21,7 @@ class StatusesTest(BaseTestCase):
         self.assertContains(response, 'Test Status')
 
     def test_status_create_public(self):
-        """Страница создания статуса доступна без логина (по логике приложения)"""
+        """Страница создания статуса доступна без логина"""
         response = self.client.get(reverse('statuses:status_create'))
         self.assertEqual(response.status_code, 200)
 

@@ -4,6 +4,7 @@ from statuses.models import Status
 from labels.models import Label
 from .base import BaseTestCase
 
+
 class TasksTest(BaseTestCase):
     @classmethod
     def setUpTestData(cls):

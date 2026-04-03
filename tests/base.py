@@ -4,6 +4,7 @@ from django.urls import reverse
 
 User = get_user_model()
 
+
 class BaseTestCase(TestCase):
     """Базовый класс с общими методами для всех тестов"""
 
@@ -25,6 +26,9 @@ class BaseTestCase(TestCase):
 
     def assertLoginRequired(self, url_name, reverse_args=None):
         """Проверяет, что страница требует логина"""
-        url = reverse(url_name, args=reverse_args) if reverse_args else reverse(url_name)
+        if reverse_args:
+            url = reverse(url_name, args=reverse_args)
+        else:
+            url = reverse(url_name)
         response = self.client.get(url)
         self.assertRedirects(response, f'/login/?next={url}')
