@@ -1,18 +1,11 @@
-setup:
-	pip install -r requirements.txt
-	python manage.py migrate
-	npx playwright install chromium --with-deps
-
-test:
-	npx playwright install chromium --with-deps
-	python manage.py test
-	npx playwright test
-
 run:
-	python manage.py runserver 0.0.0.0:8000
+	python manage.py runserver
 
-lint:
+migrations:
+	python manage.py migrate
+
+make lint:
 	ruff check .
 
-lint-fix:
+make lint-fix:
 	ruff check --fix .
