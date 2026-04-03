@@ -9,3 +9,9 @@ make lint:
 
 make lint-fix:
 	ruff check --fix .
+
+test:
+	python manage.py test
+
+test-local:
+	python manage.py test
