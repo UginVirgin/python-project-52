@@ -153,7 +153,7 @@ REST_FRAMEWORK = {
 
 ROLLBAR = {
     'access_token': os.getenv('ROLLBAR_ACCESS_TOKEN'),
-    'environment': 'development',
+    'environment': 'development' if DEBUG else 'production',
     'branch': 'master',
     'root': '/Users/uginvirgin/Desktop/hexlet-projects/python-project-52',
 }

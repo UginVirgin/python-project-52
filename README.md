@@ -5,7 +5,7 @@
 Веб-приложение для управления задачами с аутентификацией, статусами, метками и CRUD-операциями. Проект выполнен в рамках учебного курса Hexlet.
 
 ## [Деплой проекта на Render.com](https://python-project-52-xcvi.onrender.com)
-## [SonarCube check](https://sonarcloud.io/summary/overall?id=UginVirgin_python-project-52&branch=main)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=UginVirgin_python-project-52&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=UginVirgin_python-project-52)
 
 ## Функциональность
 
