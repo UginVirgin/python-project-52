@@ -1,0 +1,4 @@
+
+`W"{self.name} 
+        ({self.status.name if self.status else "без статуса"})"strself; ;("
+< =(A*K/Users/uginvirgin/Desktop/hexlet-projects/python-project-52/tasks/models.py
