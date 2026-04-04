@@ -50,3 +50,4 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
         else:
             messages.success(self.request, 'Статус успешно удален')
             return super().form_valid(form)
+        
