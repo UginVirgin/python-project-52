@@ -67,7 +67,7 @@ class TestUsersViews:
         assert response.url == reverse('users:users')
     
     def test_user_delete_another_user(self, auth_client, another_user):
-        #У даление чужого профиля
+        # Удаление чужого профиля
         url = reverse('users:user_delete', args=[another_user.pk])
         response = auth_client.post(url)
         assert response.status_code == 302
