@@ -3,5 +3,5 @@ projectKey=python-project-52
 serverUrl=https://sonarcloud.io
 serverVersion=8.0.0.84764
 dashboardUrl=https://sonarcloud.io/dashboard?id=python-project-52
-ceTaskId=AZ1Z-cW5faqkvl7XzAi2
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZ1Z-cW5faqkvl7XzAi2
+ceTaskId=AZ1jZk-6e6OZJxlmiFad
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZ1jZk-6e6OZJxlmiFad
