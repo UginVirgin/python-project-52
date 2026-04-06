@@ -2,8 +2,13 @@
 import pytest
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+import os
+from dotenv import load_dotenv
 
 User = get_user_model()
+load_dotenv('.env.test')
+
+PASSWORD = os.getenv('PASSWORD')
 
 
 @pytest.mark.django_db
@@ -45,8 +50,8 @@ class TestUsersViews:
             'username': 'updateduser',
             'first_name': 'Updated',
             'last_name': 'User',
-            'password1': 'newpass123',
-            'password2': 'newpass123',
+            'password1': PASSWORD,
+            'password2': PASSWORD,
         })
         user.refresh_from_db()
         assert user.username == 'updateduser'
