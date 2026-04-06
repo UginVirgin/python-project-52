@@ -10,7 +10,7 @@ User = get_user_model()
 class TestUsersViews:
     
     def test_user_list_view(self, client, user, another_user):
-        #Список пользователей
+        # Список пользователей
         url = reverse('users:users')
         response = client.get(url)
         assert response.status_code == 200
@@ -19,13 +19,13 @@ class TestUsersViews:
         assert 'another' in content
     
     def test_user_create_view_get(self, client):
-        #Форма создания пользователя
+        # Форма создания пользователя
         url = reverse('users:users_create')
         response = client.get(url)
         assert response.status_code == 200
     
     def test_user_create_view_post_success(self, client):
-        #Создание нового пользователя
+        # Создание нового пользователя
         users_before = User.objects.count()
         url = reverse('users:users_create')
         response = client.post(url, {
@@ -39,7 +39,7 @@ class TestUsersViews:
         assert response.url == reverse('login')
     
     def test_user_update_view_own_profile(self, auth_client, user):
-        #едактирование своего профиля
+        # едактирование своего профиля
         url = reverse('users:user_update', args=[user.pk])
         response = auth_client.post(url, {
             'username': 'updateduser',
@@ -53,13 +53,13 @@ class TestUsersViews:
         assert response.url == reverse('users:users')
     
     def test_user_update_view_another_user(self, auth_client, another_user):
-        #Редактирование чужого профиля
+        # Редактирование чужого профиля
         url = reverse('users:user_update', args=[another_user.pk])
         response = auth_client.get(url)
         assert response.status_code == 200
     
     def test_user_delete_own_profile(self, auth_client, user):
-        #Удаление своего профиля
+        # Удаление своего профиля
         user_pk = user.pk
         url = reverse('users:user_delete', args=[user_pk])
         response = auth_client.post(url)
@@ -67,7 +67,7 @@ class TestUsersViews:
         assert response.url == reverse('users:users')
     
     def test_user_delete_another_user(self, auth_client, another_user):
-        #Удаление чужого профиля
+        #У даление чужого профиля
         url = reverse('users:user_delete', args=[another_user.pk])
         response = auth_client.post(url)
         assert response.status_code == 302
