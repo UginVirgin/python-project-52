@@ -7,10 +7,10 @@ load_dotenv('.env.test')
 
 User = get_user_model()
 
-TEST_USER_PASSWORD = os.getenv('TEST_USER_PASSWORD', 'default_test_pass_123')
-TEST_ANOTHER_USER_PASSWORD = os.getenv('TEST_ANOTHER_USER_PASSWORD', 'default_another_pass_456')
-TEST_CREATOR_PASSWORD = os.getenv('TEST_CREATOR_PASSWORD', 'default_creator_pass_789')
-TEST_EXECUTOR_PASSWORD = os.getenv('TEST_EXECUTOR_PASSWORD', 'default_executor_pass_101112')
+TEST_USER_PASSWORD = os.getenv('TEST_USER_PASSWORD')
+TEST_ANOTHER_USER_PASSWORD = os.getenv('TEST_ANOTHER_USER_PASSWORD')
+TEST_CREATOR_PASSWORD = os.getenv('TEST_CREATOR_PASSWORD')
+TEST_EXECUTOR_PASSWORD = os.getenv('TEST_EXECUTOR_PASSWORD')
 
 
 @pytest.fixture
