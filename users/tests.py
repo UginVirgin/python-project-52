@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 User = get_user_model()
 load_dotenv('.env.test')
 
-PASSWORD = os.getenv('PASSWORD')
+PASSWORD1 = os.getenv('PASSWORD1')
+PASSWORD2 = os.getenv('PASSWORD2')
 
 
 @pytest.mark.django_db
@@ -37,8 +38,8 @@ class TestUsersViews:
             'username': 'newuser',
             'first_name': 'New',
             'last_name': 'User',
-            'password1': 'complexpass123',
-            'password2': 'complexpass123',
+            'password1': PASSWORD1,
+            'password2': PASSWORD1,
         })
         assert User.objects.count() == users_before + 1
         assert response.url == reverse('login')
@@ -50,8 +51,8 @@ class TestUsersViews:
             'username': 'updateduser',
             'first_name': 'Updated',
             'last_name': 'User',
-            'password1': PASSWORD,
-            'password2': PASSWORD,
+            'password1': PASSWORD2,
+            'password2': PASSWORD2,
         })
         user.refresh_from_db()
         assert user.username == 'updateduser'
