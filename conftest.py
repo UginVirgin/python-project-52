@@ -1,15 +1,23 @@
 import pytest
+import os
+from dotenv import load_dotenv
 from django.contrib.auth import get_user_model
 
+load_dotenv('.env.test')
+
 User = get_user_model()
+
+TEST_USER_PASSWORD = os.getenv('TEST_USER_PASSWORD', 'default_test_pass_123')
+TEST_ANOTHER_USER_PASSWORD = os.getenv('TEST_ANOTHER_USER_PASSWORD', 'default_another_pass_456')
+TEST_CREATOR_PASSWORD = os.getenv('TEST_CREATOR_PASSWORD', 'default_creator_pass_789')
+TEST_EXECUTOR_PASSWORD = os.getenv('TEST_EXECUTOR_PASSWORD', 'default_executor_pass_101112')
 
 
 @pytest.fixture
 def user(db):
-    """Обычный пользователь"""
     return User.objects.create_user(
         username='testuser',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
         first_name='Test',
         last_name='User'
     )
@@ -17,10 +25,9 @@ def user(db):
 
 @pytest.fixture
 def another_user(db):
-    """Другой пользователь"""
     return User.objects.create_user(
         username='another',
-        password='testpass123',
+        password=TEST_ANOTHER_USER_PASSWORD,
         first_name='Another',
         last_name='User'
     )
@@ -28,33 +35,29 @@ def another_user(db):
 
 @pytest.fixture
 def auth_client(client, user):
-    """Клиент с авторизованным обычным пользователем"""
-    client.login(username='testuser', password='testpass123')
+    client.login(username='testuser', password=TEST_USER_PASSWORD)
     return client
 
 
 @pytest.fixture
 def task_creator(db):
-    """Создатель задачи"""
     User = get_user_model()
     return User.objects.create_user(
         username='creator',
-        password='creatorpass123'
+        password=TEST_CREATOR_PASSWORD
     )
 
 
 @pytest.fixture
 def task_executor(db):
-    """Исполнитель задачи"""
     User = get_user_model()
     return User.objects.create_user(
         username='executor',
-        password='executorpass123'
+        password=TEST_EXECUTOR_PASSWORD
     )
 
 
 @pytest.fixture
 def auth_creator_client(client, task_creator):
-    """Клиент с авторизованным создателем задачи"""
-    client.login(username='creator', password='creatorpass123')
+    client.login(username='creator', password=TEST_CREATOR_PASSWORD)
     return client
